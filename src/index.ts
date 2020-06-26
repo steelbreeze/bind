@@ -6,3 +6,5 @@ export { value } from './value';
 export { from } from './from';
 
 export { element } from './element';
+
+export { update } from './update';

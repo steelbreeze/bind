@@ -7,34 +7,48 @@
 
 <body>
     <h1>Hello <span id="name"></span></h1>
-    <p id="selectedGender"></p>
-    <label for="givenName">Given name: </label>
-    <input type="text" id="givenName">
-    <label for="familyName">Family name: </label>
-    <input type="text" id="familyName">
-    <label for="gender">Gender: </label>
-    <select id="gender">
-        <script type="text/javascript" src="./dist/bind.min.js"></script>
-        <script>
-            // initilise the model
-            const genders = new bind.Observable(["Male", "Female", "Other"]);
-            const name = new bind.Observable({ givenName: "Jane", familyName: "Doe", gender: "Female" });
+    <p><span id="selectedGender"></span>, <span id="selectedAge"></span></p>
+    <div>
+        <label for="givenName">Given name: </label>
+        <input type="text" id="givenName">
+    </div>
+    <div>
+        <label for="familyName">Family name: </label>
+        <input type="text" id="familyName">
+    </div>
+    <div>
+        <label for="gender">Gender: </label>
+        <select id="gender">
+    </div>
+    <div>
+        <label for="age">Age:</label>
+        <input type="range" id="age" name="age" min="0" max="120">
+    </div>
+    <script type="text/javascript" src="./dist/bind.min.js"></script>
+    <script>
+        // initilise the model
+        const genders = new bind.Observable(["Male", "Female", "Other"]);
+        const name = new bind.Observable({ givenName: "Jane", familyName: "Doe", gender: "Female", age: 25 });
 
-            // bind static visual elements to the model
-            bind.text(document.getElementById("name"), name, state => state.givenName + " " + state.familyName);
-            bind.text(document.getElementById("selectedGender"), name, state => state.gender);
-            
-            // bind dynamic visual elements to the model
-            bind.html(document.getElementById("gender"), genders, state => state.map(gender => bind.element("option", gender, { value: gender })));
-            bind.value(document.getElementById("gender"), name, state => state.gender);
-            bind.from(document.getElementById("gender"), name, (value, state) => { return { givenName: state.givenName, familyName: state.familyName, gender: value }; });
+        // bind static visual elements to the model
+        bind.text(document.getElementById("name"), name, state => state.givenName + " " + state.familyName);
+        bind.text(document.getElementById("selectedGender"), name, state => state.gender);
+        bind.text(document.getElementById("selectedAge"), name, state => state.age);
 
-            bind.value(document.getElementById("givenName"), name, state => state.givenName);
-            bind.from(document.getElementById("givenName"), name, (value, state) => { return { givenName: value, familyName: state.familyName, gender: state.gender }; });
+        // bind dynamic visual elements to the model
+        bind.html(document.getElementById("gender"), genders, state => state.map(gender => bind.element("option", gender, { value: gender })));
+        bind.value(document.getElementById("gender"), name, state => state.gender);
+        bind.from(document.getElementById("gender"), name, (value, state) => bind.update({ gender: value }, state));
 
-            bind.value(document.getElementById("familyName"), name, state => state.familyName);
-            bind.from(document.getElementById("familyName"), name, (value, state) => { return { givenName: state.givenName, familyName: value, gender: state.gender }; });
-        </script>
+        bind.value(document.getElementById("givenName"), name, state => state.givenName);
+        bind.from(document.getElementById("givenName"), name, (value, state) => bind.update({ givenName: value }, state));
+
+        bind.value(document.getElementById("familyName"), name, state => state.familyName);
+        bind.from(document.getElementById("familyName"), name, (value, state) => bind.update({ familyName: value }, state));
+
+        bind.value(document.getElementById("age"), name, state => state.age);
+        bind.from(document.getElementById("age"), name, (value, state) => bind.update({ age: value }, state));
+    </script>
 </body>
 
 </html>
