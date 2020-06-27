@@ -21,33 +21,36 @@
         <select id="gender">
     </div>
     <div>
-        <label for="age">Age:</label>
+        <label for="age">Age: </label>
         <input type="range" id="age" name="age" min="0" max="120">
     </div>
     <script type="text/javascript" src="./dist/bind.min.js"></script>
     <script>
         // initilise the model
         const genders = new bind.Observable(["Male", "Female", "Other"]);
-        const name = new bind.Observable({ givenName: "Jane", familyName: "Doe", gender: "Female", age: 25 });
+        const person = new bind.Observable({ givenName: "Jane", familyName: "Doe", gender: "Female", age: 25 });
 
         // bind static visual elements to the model
-        bind.text(document.getElementById("name"), name, state => state.givenName + " " + state.familyName);
-        bind.text(document.getElementById("selectedGender"), name, state => state.gender);
-        bind.text(document.getElementById("selectedAge"), name, state => state.age);
+        bind.stateToHTML("name", person, state => state.givenName + " " + state.familyName);
+        bind.stateToHTML("selectedGender", person, state => state.gender);
+//        bind.text(document.getElementById("selectedAge"), person, state => state.age);
 
-        // bind dynamic visual elements to the model
-        bind.html(document.getElementById("gender"), genders, state => state.map(gender => bind.element("option", gender, { value: gender })));
-        bind.value(document.getElementById("gender"), name, state => state.gender);
-        bind.from(document.getElementById("gender"), name, (value, state) => bind.update({ gender: value }, state));
+        bind.stateToHTML("selectedAge", person, state => state.age);
 
-        bind.value(document.getElementById("givenName"), name, state => state.givenName);
-        bind.from(document.getElementById("givenName"), name, (value, state) => bind.update({ givenName: value }, state));
+        // add the options to the gender list (this needs to be done prior to binding the value)
+        bind.stateToHTML("gender", genders, (state) => state.map(gender => bind.element("option", gender, { value: gender })).join(""));
 
-        bind.value(document.getElementById("familyName"), name, state => state.familyName);
-        bind.from(document.getElementById("familyName"), name, (value, state) => bind.update({ familyName: value }, state));
+        // update controls from observable state
+        bind.propertyToValue("givenName", person);
+        bind.propertyToValue("familyName", person);
+        bind.propertyToValue("gender", person);
+        bind.propertyToValue("age", person);
 
-        bind.value(document.getElementById("age"), name, state => state.age);
-        bind.from(document.getElementById("age"), name, (value, state) => bind.update({ age: value }, state));
+        // update the observable state from control changes
+        bind.valueToProperty("givenName", person);
+        bind.valueToProperty("familyName", person);
+        bind.valueToProperty("gender", person);
+        bind.valueToProperty("age", person);
     </script>
 </body>
 

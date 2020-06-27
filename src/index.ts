@@ -1,10 +1,7 @@
 export { Observable } from './Observable';
 
-export { text } from './text';
-export { html } from './html';
-export { value } from './value';
-export { from } from './from';
+export { stateToHTML } from './stateToHTML';
+export { propertyToValue } from './propertyToValue';
+export { valueToProperty } from './valueToProperty';
 
 export { element } from './element';
-
-export { update } from './update';
