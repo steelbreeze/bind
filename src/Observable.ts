@@ -13,6 +13,7 @@ export class Observable<TState> {
      * @param state The initial state.
      */
     public constructor(state: TState) {
+        // create the initial state
         this._state = state;
     }
 
@@ -23,8 +24,10 @@ export class Observable<TState> {
      * @returns Returns the update function (so it can be later detached if required).
      */
     attach(observer: IObserver<TState>, notify: boolean = true): IObserver<TState> {
+        // add the new observer
         this.observers.push(observer);
 
+        // call the observer if required (initial value on subscription)
         if (notify) {
             observer(this.state);
         }
@@ -37,8 +40,10 @@ export class Observable<TState> {
      * @param observer A previously attached function.
      */
     public detach(observer: IObserver<TState>): void {
+        // find the observer
         const index = this.observers.indexOf(observer);
 
+        // remove the observer
         if (index !== -1) {
             this.observers.splice(index, 1);
         }
@@ -48,6 +53,7 @@ export class Observable<TState> {
      * Update the curent state and notify any observers
      */
     set state(value: TState) {
+        // update the new state
         this._state = value;
 
         // update the observers
