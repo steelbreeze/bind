@@ -1,7 +1,7 @@
 import { Observable } from './Observable';
-import { IUpdate } from './IUpdate';
+import { IObserver } from './IObserver';
 
-export function stateToHTML<TState>(elementId: string, observable: Observable<TState>, f: (state: TState) => string): IUpdate<TState> {
+export function stateToHTML<TState>(elementId: string, observable: Observable<TState>, f: (state: TState) => string): IObserver<TState> {
     const element = document.getElementById(elementId);
 
     if (element) {

@@ -1,41 +1,43 @@
-import { IUpdate } from './IUpdate';
+import { IObserver } from './IObserver';
 
 /**
  * Implementation of the Observer pattern, allowing observers to attach to an object an be notified when its state changes.
  * @param TState The type of the underlying state.
  */
 export class Observable<TState> {
-    observers: Array<IUpdate<TState>> = [];
+    private observers: Array<IObserver<TState>> = [];
+    private _state: TState;
 
     /**
      * Creates a new instance of the Observer class
      * @param state The initial state.
      */
-    public constructor(public state: TState) {
+    public constructor(state: TState) {
+        this._state = state;
     }
 
     /**
      * Receive updates when the state changes.
-     * @param update A function to call when the state changes.
+     * @param observer A function to call when the state changes.
      * @param notify Optional flag to control if the observer should be notified upon attaching to receive the latest value.
      * @returns Returns the update function (so it can be later detached if required).
      */
-    attach(update: IUpdate<TState>, notify: boolean = true): IUpdate<TState> {
-        this.observers.push(update);
+    attach(observer: IObserver<TState>, notify: boolean = true): IObserver<TState> {
+        this.observers.push(observer);
 
         if (notify) {
-            update(this.state);
+            observer(this.state);
         }
 
-        return update;
+        return observer;
     }
 
     /**
      * Stop receiving updates when the state changes.
-     * @param update A previously attached function.
+     * @param observer A previously attached function.
      */
-    public detach(update: IUpdate<TState>): void {
-        const index = this.observers.indexOf(update);
+    public detach(observer: IObserver<TState>): void {
+        const index = this.observers.indexOf(observer);
 
         if (index !== -1) {
             this.observers.splice(index, 1);
@@ -43,31 +45,21 @@ export class Observable<TState> {
     }
 
     /**
-     * Updates all observers upon state change.
+     * Update the curent state and notify any observers
      */
-    private notify(): void {
+    set state(value: TState) {
+        this._state = value;
+
+        // update the observers
         for (const observer of this.observers) {
             observer(this.state);
         }
     }
 
     /**
-     * Updates the state of the observable object, calling all observers to be notified.
-     * @param state The new state for the observable object.
+     * Returns the currernt state of the observable.
      */
-    public setState(state: TState, notify: boolean = true): void {
-        this.state = state;
-
-        if (notify) {
-            this.notify();
-        }
-    }
-
-    /**
-     * Gets the current state of the observaable object.
-     * @returns Returns the current state of the observable object
-     */
-    public getState(): TState {
-        return this.state;
+    get state() {
+        return this._state;
     }
 }

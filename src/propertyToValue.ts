@@ -1,8 +1,8 @@
 import { Observable } from './Observable';
 import { Value } from './Value';
-import { IUpdate } from './IUpdate';
+import { IObserver } from './IObserver';
 
-export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: Value) => Value = (value: Value) => value): IUpdate<TState> {
+export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: Value) => Value = (value: Value) => value): IObserver<TState> {
     const element = document.getElementById(elementId);
 
     if (element) {

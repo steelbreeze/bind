@@ -15,14 +15,14 @@ export function valueToProperty<TState>(elementId: string, observable: Observabl
         if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement) {
             // for input fields, add an event listner for value changes
             element.onchange = () => {
-                let state: any = observable.getState();
+                let state: any = observable.state;
                 let value: any = f(element.value);
 
                 // only update the observable state if it has changed
                 if (value !== state[propertyName]) {
                     state[propertyName] = value;
 
-                    observable.setState(state);
+                    observable.state = state;
                 }
             };
         } else {

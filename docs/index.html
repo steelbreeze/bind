@@ -31,14 +31,12 @@
         const person = new bind.Observable({ givenName: "Jane", familyName: "Doe", gender: "Female", age: 25 });
 
         // bind static visual elements to the model
-        bind.stateToHTML("name", person, state => state.givenName + " " + state.familyName);
-        bind.stateToHTML("selectedGender", person, state => state.gender);
-//        bind.text(document.getElementById("selectedAge"), person, state => state.age);
-
-        bind.stateToHTML("selectedAge", person, state => state.age);
+        bind.stateToHTML("name", person, person => person.givenName + " " + person.familyName);
+        bind.stateToHTML("selectedGender", person, person => person.gender);
+        bind.stateToHTML("selectedAge", person, person => person.age);
 
         // add the options to the gender list (this needs to be done prior to binding the value)
-        bind.stateToHTML("gender", genders, (state) => state.map(gender => bind.element("option", gender, { value: gender })).join(""));
+        bind.stateToHTML("gender", genders, (genders) => genders.map(gender => bind.element("option", gender, { value: gender })).join(""));
 
         // update controls from observable state
         bind.propertyToValue("givenName", person);
