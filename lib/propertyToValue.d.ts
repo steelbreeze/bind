@@ -8,5 +8,6 @@ import { IObserver } from './IObserver';
  * @param observable The observable state to update upon a change.
  * @param propertyName The name of the property with the observable state to update; defaults to the elementId.
  * @param f An optional function to convert the element value prior to updating the observable state.
+ * @param notify An optional parameter to notify the control immediately; defaults to true.
  */
-export declare function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName?: string, f?: (value: Value) => Value): IObserver<TState>;
+export declare function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName?: string, f?: (value: Value) => Value, notify?: boolean): IObserver<TState>;

@@ -9,8 +9,9 @@ import { IObserver } from './IObserver';
  * @param observable The observable state to update upon a change.
  * @param propertyName The name of the property with the observable state to update; defaults to the elementId.
  * @param f An optional function to convert the element value prior to updating the observable state.
+ * @param notify An optional parameter to notify the control immediately; defaults to true.
  */
-export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: Value) => Value = (value: Value) => value): IObserver<TState> {
+export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: Value) => Value = (value: Value) => value, notify: boolean = true): IObserver<TState> {
     const element = document.getElementById(elementId);
 
     if (element) {
@@ -22,7 +23,7 @@ export function propertyToValue<TState>(elementId: string, observable: Observabl
                 if (element.value !== value) {
                     element.value = value;
                 }
-            });
+            }, notify);
         } else {
             throw new Error(`${elementId} is not an HTMLElement or HTMLSelectElement`);
         }
