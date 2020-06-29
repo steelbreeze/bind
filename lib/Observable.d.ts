@@ -1,14 +1,14 @@
 import { IObserver } from './IObserver';
 /**
  * Implementation of the Observer pattern, allowing observers to attach to an object an be notified when its state changes.
- * @param TState The type of the underlying state.
+ * @typeParam TState The type of the underlying state.
  */
 export declare class Observable<TState> {
     private observers;
     private _state;
     /**
      * Creates a new instance of the Observer class
-     * @param state The initial state.
+     * @param state The initial underlying state.
      */
     constructor(state: TState);
     /**
@@ -24,11 +24,8 @@ export declare class Observable<TState> {
      */
     detach(observer: IObserver<TState>): void;
     /**
-     * Update the curent state and notify any observers
+     * The underlying state being observed.
      */
     set state(value: TState);
-    /**
-     * Returns the currernt state of the observable.
-     */
     get state(): TState;
 }

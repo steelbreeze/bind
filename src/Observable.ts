@@ -2,7 +2,7 @@ import { IObserver } from './IObserver';
 
 /**
  * Implementation of the Observer pattern, allowing observers to attach to an object an be notified when its state changes.
- * @param TState The type of the underlying state.
+ * @typeParam TState The type of the underlying state.
  */
 export class Observable<TState> {
     private observers: Array<IObserver<TState>> = [];
@@ -10,7 +10,7 @@ export class Observable<TState> {
 
     /**
      * Creates a new instance of the Observer class
-     * @param state The initial state.
+     * @param state The initial underlying state.
      */
     public constructor(state: TState) {
         // create the initial state
@@ -50,7 +50,7 @@ export class Observable<TState> {
     }
 
     /**
-     * Update the curent state and notify any observers
+     * The underlying state being observed.
      */
     set state(value: TState) {
         // update the new state
@@ -62,9 +62,6 @@ export class Observable<TState> {
         }
     }
 
-    /**
-     * Returns the currernt state of the observable.
-     */
     get state() {
         return this._state;
     }
