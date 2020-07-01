@@ -1,5 +1,5 @@
 import { Observable } from './Observable';
-import { IObserver } from './IObserver';
+import { Observer } from './Observer';
 /**
  * Binds an HTMLInputElement or HTMLSelectElement's value to changes in an Observable object.
  * @typeParam TState The type of the underlying state.
@@ -9,4 +9,4 @@ import { IObserver } from './IObserver';
  * @param f An optional function to convert the element value prior to updating the observable state.
  * @param notify An optional parameter to notify the control immediately; defaults to true.
  */
-export declare function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName?: string, f?: (value: any) => any, notify?: boolean): IObserver<TState>;
+export declare function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName?: string, f?: (value: any) => any, notify?: boolean): Observer<TState>;

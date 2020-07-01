@@ -26,7 +26,7 @@ export function valueToProperty<TState>(elementId: string, observable: Observabl
                 }
             };
         } else {
-            throw new Error(`${elementId} is not an HTMLElement or HTMLSelectElement`);
+            throw new Error(`${elementId} is not an HTMLInputElement or HTMLSelectElement`);
         }
     } else {
         throw new Error(`${elementId} is not an element`);

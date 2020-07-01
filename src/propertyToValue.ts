@@ -1,5 +1,5 @@
 import { Observable } from './Observable';
-import { IObserver } from './IObserver';
+import { Observer } from './Observer';
 
 /**
  * Binds an HTMLInputElement or HTMLSelectElement's value to changes in an Observable object.
@@ -10,7 +10,7 @@ import { IObserver } from './IObserver';
  * @param f An optional function to convert the element value prior to updating the observable state.
  * @param notify An optional parameter to notify the control immediately; defaults to true.
  */
-export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: any) => any = (value: any) => value, notify: boolean = true): IObserver<TState> {
+export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: any) => any = (value: any) => value, notify: boolean = true): Observer<TState> {
     const element = document.getElementById(elementId);
 
     if (element) {
@@ -24,7 +24,7 @@ export function propertyToValue<TState>(elementId: string, observable: Observabl
                 }
             }, notify);
         } else {
-            throw new Error(`${elementId} is not an HTMLElement or HTMLSelectElement`);
+            throw new Error(`${elementId} is not an HTMLInputElement or HTMLSelectElement`);
         }
     } else {
         throw new Error(`${elementId} is not an element`);

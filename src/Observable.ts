@@ -1,11 +1,11 @@
-import { IObserver } from './IObserver';
+import { Observer } from './Observer';
 
 /**
  * Implementation of the Observer pattern, allowing observers to attach to an object an be notified when its state changes.
  * @typeParam TState The type of the underlying state.
  */
 export class Observable<TState> {
-    private observers: Array<IObserver<TState>> = [];
+    private observers: Array<Observer<TState>> = [];
     private _state: TState;
 
     /**
@@ -23,7 +23,7 @@ export class Observable<TState> {
      * @param notify Optional flag to control if the observer should be notified upon attaching to receive the latest value.
      * @returns Returns the update function (so it can be later detached if required).
      */
-    attach(observer: IObserver<TState>, notify: boolean = true): IObserver<TState> {
+    attach(observer: Observer<TState>, notify: boolean = true): Observer<TState> {
         // add the new observer
         this.observers.push(observer);
 
@@ -39,7 +39,7 @@ export class Observable<TState> {
      * Stop receiving updates when the state changes.
      * @param observer A previously attached function.
      */
-    public detach(observer: IObserver<TState>): void {
+    public detach(observer: Observer<TState>): void {
         // find the observer
         const index = this.observers.indexOf(observer);
 
