@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bind</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="./dist/materialize/css/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="./dist/materialize/css/materialize.min.css"
+        media="screen,projection" />
 </head>
 
 <body>
@@ -44,30 +45,35 @@
     <script type="text/javascript" src="./dist/materialize/js/materialize.min.js"></script>
     <script>
         // initialise the model
-        const genders = new bind.Observable(["Female", "Male"]);
-        const person = new bind.Observable({ givenName: "Jane", familyName: "Doe", gender: "Female", age: 25 });
+        const genders = new bind.Observable([{ value: 'female', label: 'Female' }, { value: 'male', label: 'Male' }]);
+        const person = new bind.Observable({ givenName: 'Jane', familyName: 'Doe', gender: 'female', age: 25 });
 
         // bind the options in the gender drop-down list to the genders observable state
-        bind.stateToHTML("gender", genders, (genders) => genders.map(gender => bind.element("option", gender, { value: gender })).join(""));
+        bind.stateToHTML('gender', genders, (genders) => genders.map(gender => option(gender)).join(''));
 
         // bind the form fields to changes in the observable state
-        bind.propertyToValue("givenName", person);
-        bind.propertyToValue("familyName", person);
-        bind.propertyToValue("gender", person);
-        bind.propertyToValue("age", person, "age", property => String(property));
+        bind.propertyToValue('givenName', person);
+        bind.propertyToValue('familyName', person);
+        bind.propertyToValue('gender', person);
+        bind.propertyToValue('age', person, 'age', property => String(property));
 
         // bind the observable state to changes in the form fields
-        bind.valueToProperty("givenName", person);
-        bind.valueToProperty("familyName", person);
-        bind.valueToProperty("gender", person);
-        bind.valueToProperty("age", person, "age", value => Number(value));
+        bind.valueToProperty('givenName', person);
+        bind.valueToProperty('familyName', person);
+        bind.valueToProperty('gender', person);
+        bind.valueToProperty('age', person, 'age', value => Number(value));
 
         // bind the Observable state to the summary card
-        bind.stateToHTML("fullName", person, person => `${person.givenName} ${person.familyName}`);
-        bind.stateToHTML("summary", person, person => `A ${person.age} year old ${person.gender.toLowerCase()}.`);
+        bind.stateToHTML('fullName', person, person => `${person.givenName} ${person.familyName}`);
+        bind.stateToHTML('summary', person, person => `A ${person.age} year old ${person.gender}.`);
 
         // initialise materalize
         M.AutoInit();
+
+        // creates an option element
+        function option(gender) {
+            return '<option value="' + gender.value + '">' + gender.label + '</option>';
+        }
     </script>
 </body>
 
