@@ -1,5 +1,4 @@
 import { Observable } from './Observable';
-import { Value } from './Value';
 import { IObserver } from './IObserver';
 
 /**
@@ -11,7 +10,7 @@ import { IObserver } from './IObserver';
  * @param f An optional function to convert the element value prior to updating the observable state.
  * @param notify An optional parameter to notify the control immediately; defaults to true.
  */
-export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: Value) => Value = (value: Value) => value, notify: boolean = true): IObserver<TState> {
+export function propertyToValue<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: any) => any = (value: any) => value, notify: boolean = true): IObserver<TState> {
     const element = document.getElementById(elementId);
 
     if (element) {

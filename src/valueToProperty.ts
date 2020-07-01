@@ -1,5 +1,4 @@
 import { Observable } from './Observable';
-import { Value } from './Value';
 
 /**
  * Binds an Observable object to value changes within an HTMLInputElement or HTMLSelectElement.
@@ -9,7 +8,7 @@ import { Value } from './Value';
  * @param propertyName - The name of the property with the observable state to update; defaults to the elementId.
  * @param f - An optional function to convert the element value prior to updating the observable state.
  */
-export function valueToProperty<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: Value) => Value = (value: Value) => value): void {
+export function valueToProperty<TState>(elementId: string, observable: Observable<TState>, propertyName: string = elementId, f: (value: any) => any = (value: any) => value): void {
     const element = document.getElementById(elementId);
 
     if (element) {
