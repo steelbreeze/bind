@@ -15,7 +15,7 @@ export function valueToProperty<TState>(elementId: string, observable: Observabl
         if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement) {
             // for input fields, add an event listner for value changes
             element.onchange = () => {
-                let state: any = observable.state;
+                let state: any = observable.state || {};
                 let value: any = f(element.value);
 
                 // only update the observable state if it has changed

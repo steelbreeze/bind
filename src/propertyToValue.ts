@@ -17,7 +17,7 @@ export function propertyToValue<TState>(elementId: string, observable: Observabl
         if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement) {
             // for input field, bind to the value attribute
             return observable.attach((state: any) => {
-                const value: any = f(state[propertyName]);
+                const value: any = f(state ? state[propertyName] : undefined);
 
                 if (element.value !== value) {
                     element.value = value;
