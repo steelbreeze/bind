@@ -4,7 +4,7 @@ import { Observer } from './Observer';
  * @typeParam TState The type of the underlying state.
  */
 export declare class Observable<TState> {
-    private observers;
+    private _observers;
     private _state;
     /**
      * Creates a new instance of the Observer class

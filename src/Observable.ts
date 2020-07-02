@@ -5,7 +5,7 @@ import { Observer } from './Observer';
  * @typeParam TState The type of the underlying state.
  */
 export class Observable<TState> {
-    private observers: Array<Observer<TState>> = [];
+    private _observers: Array<Observer<TState>> = [];
     private _state: TState;
 
     /**
@@ -13,7 +13,6 @@ export class Observable<TState> {
      * @param state The initial underlying state.
      */
     public constructor(state: TState) {
-        // create the initial state
         this._state = state;
     }
 
@@ -24,15 +23,19 @@ export class Observable<TState> {
      * @returns Returns the update function (so it can be later detached if required).
      */
     attach(observer: Observer<TState>, notify: boolean = true): Observer<TState> {
-        // add the new observer
-        this.observers.push(observer);
+        if (observer) {
+            // add the new observer
+            this._observers.push(observer);
 
-        // call the observer if required (initial value on subscription)
-        if (notify) {
-            observer(this.state);
+            // call the observer if required (initial value on subscription)
+            if (notify) {
+                observer(this.state);
+            }
+
+            return observer;
+        } else {
+            throw new Error(`Observer cannot be undefined`);
         }
-
-        return observer;
     }
 
     /**
@@ -41,11 +44,11 @@ export class Observable<TState> {
      */
     public detach(observer: Observer<TState>): void {
         // find the observer
-        const index = this.observers.indexOf(observer);
+        const index = this._observers.indexOf(observer);
 
         // remove the observer
         if (index !== -1) {
-            this.observers.splice(index, 1);
+            this._observers.splice(index, 1);
         }
     }
 
@@ -57,11 +60,10 @@ export class Observable<TState> {
         this._state = value;
 
         // update the observers
-        for (const observer of this.observers) {
+        for (const observer of this._observers) {
             observer(this.state);
         }
     }
-
     get state() {
         return this._state;
     }
