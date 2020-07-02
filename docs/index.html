@@ -49,23 +49,25 @@
         const person = new bind.Observable({ givenName: 'Jane', familyName: 'Doe', gender: 'female', age: 25 });
 
         // bind the options in the gender drop-down list to the genders observable state
-        bind.stateToHTML(document.getElementById('gender'), genders, (genders) => genders.map(gender => option(gender)).join(''));
-
-        // bind the form fields to changes in the observable state
-        bind.propertyToValue(document.getElementById('givenName'), person);
-        bind.propertyToValue(document.getElementById('familyName'), person);
-        bind.propertyToValue(document.getElementById('gender'), person);
-        bind.propertyToValue(document.getElementById('age'), person, 'age', property => String(property));
-
-        // bind the observable state to changes in the form fields
-        bind.valueToProperty(document.getElementById('givenName'), person);
-        bind.valueToProperty(document.getElementById('familyName'), person);
-        bind.valueToProperty(document.getElementById('gender'), person);
-        bind.valueToProperty(document.getElementById('age'), person, 'age', value => Number(value));
+        genders.toHTML(document.getElementById('gender'), (genders) => genders.map(gender => option(gender)).join(''));
 
         // bind the Observable state to the summary card
-        bind.stateToHTML(document.getElementById('fullName'), person, person => `${person.givenName} ${person.familyName}`);
-        bind.stateToHTML(document.getElementById('summary'), person, person => `A ${person.age} year old ${person.gender}.`);
+        person.toHTML(document.getElementById('fullName'), state => `${state.givenName} ${state.familyName}`);
+        person.toHTML(document.getElementById('summary'), state => `A ${state.age} year old ${state.gender}.`);
+
+        // bind the form fields to changes in the observable state
+        person.toValue(document.getElementById('givenName'), state => state.givenName);
+        person.toValue(document.getElementById('familyName'), state => state.familyName);
+        person.toValue(document.getElementById('gender'), state => state.gender);
+        person.toValue(document.getElementById('age'), state => String(state.age));
+
+        // bind the observable state to changes in the form fields
+        person.fromValue(document.getElementById('givenName'), (state, value) => state.givenName = value);
+        person.fromValue(document.getElementById('familyName'), (state, value) => state.familyName = value);
+        person.fromValue(document.getElementById('gender'), (state, value) => state.gender = value);
+        person.fromValue(document.getElementById('age'), (state, value) => state.age = Number(value));
+
+        person.attach(person => console.log(person));
 
         // initialise materalize
         M.AutoInit();

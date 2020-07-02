@@ -5,15 +5,13 @@ import { Observer } from './Observer';
  * @typeParam TState The type of the underlying state.
  */
 export class Observable<TState> {
-    private _observers: Array<Observer<TState>> = [];
-    private _state: TState;
+    private observers: Array<Observer<TState>> = [];
 
     /**
      * Creates a new instance of the Observer class
      * @param state The initial underlying state.
      */
-    public constructor(state: TState) {
-        this._state = state;
+    public constructor(public state: TState) {
     }
 
     /**
@@ -22,19 +20,13 @@ export class Observable<TState> {
      * @param notify Optional flag to control if the observer should be notified upon attaching to receive the latest value.
      * @returns Returns the update function (so it can be later detached if required).
      */
-    attach(observer: Observer<TState>, notify: boolean = true): Observer<TState> {
-        if (observer) {
-            // add the new observer
-            this._observers.push(observer);
+    attach(observer: Observer<TState>, notify: boolean): void {
+        // add the new observer
+        this.observers.push(observer);
 
-            // call the observer if required (initial value on subscription)
-            if (notify) {
-                observer(this.state);
-            }
-
-            return observer;
-        } else {
-            throw new Error(`Observer cannot be undefined`);
+        // call the observer if required (initial value on subscription)
+        if (notify) {
+            observer(this.state);
         }
     }
 
@@ -44,27 +36,58 @@ export class Observable<TState> {
      */
     public detach(observer: Observer<TState>): void {
         // find the observer
-        const index = this._observers.indexOf(observer);
+        const index = this.observers.indexOf(observer);
 
         // remove the observer
         if (index !== -1) {
-            this._observers.splice(index, 1);
+            this.observers.splice(index, 1);
         }
     }
 
     /**
-     * The underlying state being observed.
+     * Update the underlying state and notify observers.
      */
-    set state(value: TState) {
+    public setState(state: TState): void {
         // update the new state
-        this._state = value;
+        this.state = state;
 
+        // notify observers
+        this.notify();
+    }
+
+    /**
+     * Update all observers with the current underlying state.
+     */
+    private notify(): void {
         // update the observers
-        for (const observer of this._observers) {
+        for (const observer of this.observers) {
             observer(this.state);
         }
     }
-    get state() {
-        return this._state;
+
+    toHTML(element: HTMLElement, f: (state: TState) => string, notify: boolean = true): Observer<TState> {
+        const observer = (state: TState) => element.innerHTML = f(state);
+        
+        this.attach(observer, notify);
+
+        return observer;
+    }
+
+    toValue(element: HTMLInputElement | HTMLSelectElement, f: (state: TState) => string, notify: boolean = true): Observer<TState> {
+        const observer = (state: TState) => element.value = f(state);
+        
+        this.attach(observer, notify);
+
+        return observer;
+    }
+
+    fromValue(element: HTMLInputElement | HTMLSelectElement, f: (state: TState, value: string) => void): void {
+        element.onchange = () => {
+            // apply the new value to the observable state
+            f(this.state, element.value);
+
+            // notify the observers
+            this.notify();
+        };
     }
 }

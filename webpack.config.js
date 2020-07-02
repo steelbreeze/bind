@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-	  bind: [ './lib/index.js' ]
+	  bind: [ './lib/Observable.js' ]
   },
   mode: 'production',
   output: {

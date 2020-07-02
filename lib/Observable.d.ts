@@ -4,8 +4,8 @@ import { Observer } from './Observer';
  * @typeParam TState The type of the underlying state.
  */
 export declare class Observable<TState> {
-    private _observers;
-    private _state;
+    state: TState;
+    private observers;
     /**
      * Creates a new instance of the Observer class
      * @param state The initial underlying state.
@@ -17,15 +17,21 @@ export declare class Observable<TState> {
      * @param notify Optional flag to control if the observer should be notified upon attaching to receive the latest value.
      * @returns Returns the update function (so it can be later detached if required).
      */
-    attach(observer: Observer<TState>, notify?: boolean): Observer<TState>;
+    attach(observer: Observer<TState>, notify: boolean): void;
     /**
      * Stop receiving updates when the state changes.
      * @param observer A previously attached function.
      */
     detach(observer: Observer<TState>): void;
     /**
-     * The underlying state being observed.
+     * Update the underlying state and notify observers.
      */
-    set state(value: TState);
-    get state(): TState;
+    setState(state: TState): void;
+    /**
+     * Update all observers with the current underlying state.
+     */
+    private notify;
+    toHTML(element: HTMLElement, f: (state: TState) => string, notify?: boolean): Observer<TState>;
+    toValue(element: HTMLInputElement | HTMLSelectElement, f: (state: TState) => string, notify?: boolean): Observer<TState>;
+    fromValue(element: HTMLInputElement | HTMLSelectElement, f: (state: TState, value: string) => void): void;
 }
