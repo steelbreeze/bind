@@ -22,7 +22,7 @@ export class Observable<TState> {
      * @param observer A function to call when the state changes; takes the underlying state as a parameter.
      * @param notify Optional flag to control if the observer should be notified immediately with the curent value.
      */
-    attach(observer: Observer<TState>, notify: boolean): void {
+    attach(observer: Observer<TState>, notify: boolean): Observer<TState> {
         // add the new observer
         this.observers.push(observer);
 
@@ -30,6 +30,8 @@ export class Observable<TState> {
         if (notify) {
             observer(this.state);
         }
+
+        return observer;
     }
 
     /**
@@ -72,45 +74,19 @@ export class Observable<TState> {
      * Bind to state changes by updating the textContent of any HTMLElement.
      * @param element The HTMLElement to update on state changes.
      * @param f A function that takes the underlying state and returns the desired text.
+     * @param target The type of binding to perform, one of: [textContent], [innerHTML], or [value].
      * @param notify Optional flag to control if the element should be updated immediately based on the curent underlying state.
      */
-    toText(element: HTMLElement, f: (state: TState) => string | null, notify: boolean = true): Observer<TState> {
-        const observer = (state: TState) => element.textContent = f(state);
-
-        this.attach(observer, notify);
-
-        return observer;
+    to(element: HTMLElement, target: (element: HTMLElement, f: (state: TState) => string) => Observer<TState>, f: (state: TState) => string, notify: boolean = true): Observer<TState> {
+        return this.attach(target(element, f), notify);
     }
 
     /**
-     * Bind to state changes by updating the innerHTML of any HTMLElement.
-     * @param element The HTMLElement to update on state changes.
-     * @param f A function that takes the underlying state and returns the desired HTML.
-     * @param notify Optional flag to control if the element should be updated immediately based on the curent underlying state.
+     * Receive state changes from value changes of an HTMLInputElement of HTMLSelectElement.
+     * @param element 
+     * @param f A function to update the underlying state when the value changes.
      */
-    toHTML(element: HTMLElement, f: (state: TState) => string, notify: boolean = true): Observer<TState> {
-        const observer = (state: TState) => element.innerHTML = f(state);
-
-        this.attach(observer, notify);
-
-        return observer;
-    }
-
-    /**
-     * Bind to state changes by updating the value of an HTMLInputElement or HTMLSelectElement.
-     * @param element The HTMLInputElement or HTMLSelectElement to update on state changes.
-     * @param f A function that takes the underlying state and returns the desired value.
-     * @param notify Optional flag to control if the element should be updated immediately based on the curent underlying state.
-     */
-    toValue(element: HTMLInputElement | HTMLSelectElement, f: (state: TState) => string, notify: boolean = true): Observer<TState> {
-        const observer = (state: TState) => element.value = f(state);
-
-        this.attach(observer, notify);
-
-        return observer;
-    }
-
-    fromValue(element: HTMLInputElement | HTMLSelectElement, f: (state: TState, value: string) => void): void {
+    from(element: HTMLInputElement | HTMLSelectElement, f: (state: TState, value: string) => void): void {
         element.onchange = () => {
             // apply the new value to the observable state
             f(this.state, element.value);
@@ -119,4 +95,34 @@ export class Observable<TState> {
             this.notify();
         };
     }
+}
+
+/**
+ * Creates an [Observer] that updates an elements textContent upon a state change.
+ * @param element The element to update.
+ * @param f The function to convert from the observable state to the text content.
+ * @returns Returns an [Observer].
+ */
+export function textContent<TState>(element: HTMLElement, f: (state: TState) => string) {
+    return (state: TState) => element.textContent = f(state);
+}
+
+/**
+ * Creates an [Observer] that updates an elements innerHTML upon a state change.
+ * @param element The element to update.
+ * @param f The function to convert from the observable state to the HTML content.
+ * @returns Returns an [Observer].
+ */
+export function innerHTML<TState>(element: HTMLElement, f: (state: TState) => string) {
+    return (state: TState) => element.innerHTML = f(state);
+}
+
+/**
+ * Creates an [Observer] that updates an elements value upon a state change.
+ * @param element The element to update.
+ * @param f The function to convert from the observable state to the value.
+ * @returns Returns an [Observer].
+ */
+export function value<TState>(element: HTMLSelectElement | HTMLInputElement, f: (state: TState) => string) {
+    return (state: TState) => element.value = f(state);
 }
