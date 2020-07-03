@@ -52,8 +52,8 @@
         genders.toHTML(document.getElementById('gender'), (genders) => genders.map(gender => option(gender)).join(''));
 
         // bind the Observable state to the summary card
-        person.toHTML(document.getElementById('fullName'), state => `${state.givenName} ${state.familyName}`);
-        person.toHTML(document.getElementById('summary'), state => `A ${state.age} year old ${state.gender}.`);
+        person.toText(document.getElementById('fullName'), state => `${state.givenName} ${state.familyName}`);
+        person.toText(document.getElementById('summary'), state => `A ${state.age} year old ${state.gender}.`);
 
         // bind the form fields to changes in the observable state
         person.toValue(document.getElementById('givenName'), state => state.givenName);

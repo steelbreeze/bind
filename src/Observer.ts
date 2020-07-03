@@ -3,4 +3,3 @@
  * @typeParam TState The type of the underlying state.
  */
 export type Observer<TState> = (state: TState) => void;
-
