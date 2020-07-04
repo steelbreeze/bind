@@ -59,16 +59,24 @@ export class Observable<TState> {
         this.notify();
     }
 
+    /**
+     * Replace the underlying state completely.
+     * @param state The new state.
+     */
+    public replace(state: TState) {
+        this.state = state;
+
+        this.notify();
+    }
+
+    /**
+     * Notify all the observers of a state change.
+     * @private
+     */
     private notify(): void{
         // update the observers
         for (const observer of this.observers) {
             observer(this.state);
         }
-    }
-
-    public replace(state: TState) {
-        this.state = state;
-
-        this.notify();
     }
 }

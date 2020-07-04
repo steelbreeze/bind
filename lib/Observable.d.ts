@@ -31,6 +31,14 @@ export declare class Observable<TState> {
      * @param f A callback to use to update the state.
      */
     update(f: (state: TState) => void): void;
-    private notify;
+    /**
+     * Replace the underlying state completely.
+     * @param state The new state.
+     */
     replace(state: TState): void;
+    /**
+     * Notify all the observers of a state change.
+     * @private
+     */
+    private notify;
 }
